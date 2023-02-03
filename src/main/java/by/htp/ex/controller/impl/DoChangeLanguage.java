@@ -23,6 +23,7 @@ public class DoChangeLanguage implements Command {
             
             if(lastRequest == null) {
                 session.setAttribute("error_msg", "error getting last request");
+                
                 response.sendRedirect("controller?command=go_to_error_page");
             } 
             else {
@@ -30,6 +31,7 @@ public class DoChangeLanguage implements Command {
             }
         } catch (Exception e) {
         	session.setAttribute("error_msg", "error getting last request");
+        	
             response.sendRedirect("controller?command=go_to_error_page");
         }
     }

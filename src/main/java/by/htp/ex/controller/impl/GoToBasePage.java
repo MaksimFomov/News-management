@@ -13,14 +13,26 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-
-
 public class GoToBasePage implements Command{
-	
+	private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
+
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		List<News> latestNews;
 		
+		try {
+			latestNews = newsService.latestList(5);
+			
+			if(latestNews.size() > 0) {
+				request.setAttribute("news", latestNews);
+			}
+			
+			request.getRequestDispatcher("WEB-INF/pages/layouts/baseLayout.jsp").forward(request, response);
+		} catch (ServiceException e) {
+			HttpSession session = request.getSession(false);
+			session.setAttribute("error_msg", "cannot get the latest list of news");
+			
+			response.sendRedirect("controller?command=go_to_error_page");
+		}
 	}
-
 }

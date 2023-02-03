@@ -22,6 +22,7 @@ public class DoSignIn implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String login = request.getParameter(JSP_LOGIN_PARAM);
 		String password = request.getParameter(JSP_PASSWORD_PARAM);
+		
 		HttpSession session = request.getSession(false);
 		
 		try {
@@ -40,6 +41,7 @@ public class DoSignIn implements Command {
 			}
 		} catch (ServiceException e) {
 			session.setAttribute("error_msg", "sign in error");
+			
 			response.sendRedirect("controller?command=go_to_error_page");
 		}
 	}

@@ -12,12 +12,30 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class DoDeleteNews implements Command {
-
-	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
-	}
-
-    
+	private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
+	
+    @Override
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        
+        String[] newsIds = request.getParameterValues("idNews");
+        
+        if (newsIds != null) {
+            try {
+                newsService.delete(newsIds);
+                session.setAttribute("delete_success", "suc");
+                
+                response.sendRedirect("controller?command=go_to_news_list");
+            } catch (ServiceException e) {
+                session.setAttribute("error_msg", "delete error");
+                
+                response.sendRedirect("controller?command=go_to_error_page");
+            }
+        } 
+        else {
+            session.setAttribute("error_msg", "no news to delete selected");
+            
+            response.sendRedirect("controller?command=go_to_error_page");
+        }
+    }    
 }
