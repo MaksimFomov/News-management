@@ -4,15 +4,17 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Users implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	public Users() {
 	}
 
-	public Users(String email, String password) {
-		this.email = email;
+	public Users(String login, String password) {
+		this.login = login;
 		this.password = password;
 	}
 
-	private String email;
+	private String login;
 	private String password;
 
 	@Override
@@ -20,20 +22,20 @@ public class Users implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Users that = (Users) o;
-		return Objects.equals(email, that.email) && Objects.equals(password, that.password);
+		return Objects.equals(login, that.login) && Objects.equals(password, that.password);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, password);
+		return Objects.hash(login, password);
 	}
 
-	public String getEmail() {
-		return email;
+	public String getLogin() {
+		return login;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public String getPassword() {

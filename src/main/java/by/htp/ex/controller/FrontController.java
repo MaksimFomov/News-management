@@ -23,6 +23,12 @@ public class FrontController extends HttpServlet {
 	}
 
 	private void commandExecution(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Class not found " + e);
+        }
+		
 		String commandName = request.getParameter("command");
 
 		Command command = provider.getCommand(commandName);

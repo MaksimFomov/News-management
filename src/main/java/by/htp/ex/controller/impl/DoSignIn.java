@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 public class DoSignIn implements Command {
-
 	private final IUserService service = ServiceProvider.getInstance().getUserService();
 
 	private static final String JSP_LOGIN_PARAM = "login";

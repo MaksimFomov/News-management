@@ -24,7 +24,7 @@ public class DoRegistration implements Command {
 
 		try {
 			Users newUser = new Users();
-			newUser.setEmail(request.getParameter(JSP_LOGIN_PARAM));
+			newUser.setLogin(request.getParameter(JSP_LOGIN_PARAM));
 			newUser.setPassword(request.getParameter(JSP_PASSWORD_PARAM));
 			
 			if (!service.register(newUser)) {

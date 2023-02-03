@@ -5,10 +5,11 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
          http://xmlns.jcp.org/xml/ns/javaee/web-app_5_0.xsd"
          version="5.0">
-	<display-name>News Site</display-name>
-  <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
+	<display-name>News management</display-name>
+	
+	<welcome-file-list>
+    	<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
   
   	<servlet>
 		<servlet-name>Controller</servlet-name>
@@ -23,57 +24,5 @@
 	<error-page>
 		<location>/controller?command=go_to_error_page</location>
 	</error-page>
-
-
-	<filter>
-		<display-name>CharsetFilter</display-name>
-		<filter-name>CharsetFilter</filter-name>
-		<filter-class>by.htp.ex.controller.filters.CharsetFilter</filter-class>
-		<init-param>
-			<param-name>characterEncoding</param-name>
-			<param-value>utf-8</param-value>
-		</init-param>
-
-	</filter>
-
-	<filter>
-		<display-name>SessionFilter</display-name>
-		<filter-name>SessionFilter</filter-name>
-		<filter-class>by.htp.ex.controller.filters.SessionFilter</filter-class>
-
-	</filter>
-
-	<filter>
-		<display-name>SecurityRoleFilter</display-name>
-		<filter-name>SecurityRoleFilter</filter-name>
-		<filter-class>by.htp.ex.controller.filters.SecurityRoleFilter</filter-class>
-	</filter>
-
-
-	<filter>
-		<display-name>SaveQueryStringFilter</display-name>
-		<filter-name>SaveQueryStringFilter</filter-name>
-		<filter-class>by.htp.ex.controller.filters.SaveQueryStringFilter</filter-class>
-	</filter>
-
-
-	<filter-mapping>
-		<filter-name>CharsetFilter</filter-name>
-		<url-pattern>/controller</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>SecurityRoleFilter</filter-name>
-		<url-pattern>/controller</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>SaveQueryStringFilter</filter-name>
-		<url-pattern>/controller</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>SessionFilter</filter-name>
-		<url-pattern>/controller</url-pattern>
-	</filter-mapping>
-
-
 </web-app>
 
