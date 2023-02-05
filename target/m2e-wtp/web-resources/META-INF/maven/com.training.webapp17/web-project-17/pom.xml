@@ -4,7 +4,7 @@
 	<artifactId>web-project-17</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1</version>
-	<name>web-project-17 Maven Webapp</name>
+	<name>news management</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
