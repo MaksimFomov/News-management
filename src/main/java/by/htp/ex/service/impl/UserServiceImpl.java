@@ -15,10 +15,10 @@ public class UserServiceImpl implements IUserService{
 	private final IUserDAO userDAO = DaoProvider.getInstance().getUserDao();
 	
 	@Override
-	public String signIn(String login, String password) throws ServiceException {
+	public String signIn(Users user) throws ServiceException {
 		try {
-			if(userDAO.logination(login, password)) {
-				return userDAO.getRole(login, password);
+			if(userDAO.logination(user)) {
+				return userDAO.getRole(user);
 			} 
 			else {
 				return ROLE_GUEST;
@@ -32,7 +32,6 @@ public class UserServiceImpl implements IUserService{
 	public boolean register(Users user)  throws ServiceException {
 		try {
 			return userDAO.registration(user);
-
 		} catch(DaoException e) {
 			throw new ServiceException(e);
 		}

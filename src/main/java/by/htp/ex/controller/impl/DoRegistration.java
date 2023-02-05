@@ -28,7 +28,7 @@ public class DoRegistration implements Command {
 			newUser.setPassword(request.getParameter(JSP_PASSWORD_PARAM));
 			
 			if (!service.register(newUser)) {
-				session.setAttribute("register_error","err");
+				session.setAttribute("register_error", "err");
 			} 
 			else {
 				session.setAttribute("register_success", "suc");

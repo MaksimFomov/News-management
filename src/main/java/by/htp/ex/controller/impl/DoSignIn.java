@@ -2,6 +2,7 @@ package by.htp.ex.controller.impl;
 
 import java.io.IOException;
 
+import by.htp.ex.bean.Users;
 import by.htp.ex.controller.Command;
 import by.htp.ex.service.ServiceException;
 import by.htp.ex.service.ServiceProvider;
@@ -18,14 +19,15 @@ public class DoSignIn implements Command {
 	private static final String JSP_PASSWORD_PARAM = "password";
 
 	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String login = request.getParameter(JSP_LOGIN_PARAM);
-		String password = request.getParameter(JSP_PASSWORD_PARAM);
-		
+	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		HttpSession session = request.getSession(false);
 		
 		try {
-			String role = service.signIn(login, password);
+			Users user = new Users();
+			user.setLogin(request.getParameter(JSP_LOGIN_PARAM));
+			user.setPassword(request.getParameter(JSP_PASSWORD_PARAM));
+			
+			String role = service.signIn(user);
 
 			if (!"guest".equals(role)) {
 				session.setAttribute("userActivity", "active");
