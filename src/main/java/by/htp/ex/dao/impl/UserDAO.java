@@ -3,6 +3,7 @@ package by.htp.ex.dao.impl;
 import by.htp.ex.bean.Users;
 import by.htp.ex.dao.DaoException;
 import by.htp.ex.dao.IUserDAO;
+import by.htp.ex.dao.connectionPool.DBParameter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,11 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDAO implements IUserDAO {
-	private static final String databaseURL = "jdbc:mysql://127.0.0.1/news-management?&useSSL=false";
-	private final String sqlUser = "root";
-	private final String sqlPassword = "toortoor";
-	
+public class UserDAO implements IUserDAO {	
 	private static Connection connection = null;
 	private static PreparedStatement preparedStatement = null;
 	private static ResultSet rs = null;
@@ -34,7 +31,7 @@ public class UserDAO implements IUserDAO {
 		String role = "guest";
 		
 		try {
-			connection = DriverManager.getConnection(databaseURL, sqlUser, sqlPassword);
+			connection = DriverManager.getConnection(DBParameter.DB_URL, DBParameter.DB_USER, DBParameter.DB_PASSWORD);
 			preparedStatement = connection.prepareStatement("select * from users where login = ? and password = ?");
 	        preparedStatement.setString(1, user.getLogin());
 	        preparedStatement.setString(2, user.getPassword());
@@ -87,7 +84,7 @@ public class UserDAO implements IUserDAO {
 	public boolean registration(Users user) throws DaoException  {
 		if(findUser(user) == null) {
 			try {
-				connection = DriverManager.getConnection(databaseURL, sqlUser, sqlPassword);
+				connection = DriverManager.getConnection(DBParameter.DB_URL, DBParameter.DB_USER, DBParameter.DB_PASSWORD);
 				preparedStatement = connection.prepareStatement("insert into Users(login, password, roles_id) VALUES (?, ?, 2)");
 		        preparedStatement.setString(1, user.getLogin());
 		        preparedStatement.setString(2, user.getPassword());
@@ -128,7 +125,7 @@ public class UserDAO implements IUserDAO {
 	@Override
 	public Users findUser(Users user) throws DaoException {
 		try {
-			connection = DriverManager.getConnection(databaseURL, sqlUser, sqlPassword);
+			connection = DriverManager.getConnection(DBParameter.DB_URL, DBParameter.DB_USER, DBParameter.DB_PASSWORD);
 			preparedStatement = connection.prepareStatement("select * from users where login = ?");
 	        preparedStatement.setString(1, user.getLogin());
 	           
