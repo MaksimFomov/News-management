@@ -12,10 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO implements IUserDAO {	
-	private static Connection connection = null;
-	private static PreparedStatement preparedStatement = null;
-	private static ResultSet rs = null;
-
 	@Override
 	public boolean logination(Users user) throws DaoException {	
 		if(findUser(user) != null) {
@@ -27,6 +23,10 @@ public class UserDAO implements IUserDAO {
 	}
 	
 	public String getRole(Users user) throws DaoException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet rs = null;
+		
 		int id = 0;
 		String role = "guest";
 		
@@ -36,12 +36,38 @@ public class UserDAO implements IUserDAO {
 	        preparedStatement.setString(1, user.getLogin());
 	        preparedStatement.setString(2, user.getPassword());
 	            
-	        ResultSet rs = preparedStatement.executeQuery();
+	        rs = preparedStatement.executeQuery();
 	        while (rs.next()) {
 	            id = rs.getInt("roles_id");
             }
-	        
-	        preparedStatement = connection.prepareStatement("select * from roles where id = ?");
+		} catch (SQLException e) {
+			printSQLException(e);
+	    } finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}			
+			try {
+				if (preparedStatement != null) {
+					preparedStatement.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		try {
+			preparedStatement = connection.prepareStatement("select * from roles where id = ?");
 	        preparedStatement.setInt(1, id);
 	            
 	        rs = preparedStatement.executeQuery();
@@ -75,13 +101,17 @@ public class UserDAO implements IUserDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
+	    }
 		
 		return role;
 	}
 
 	@Override
 	public boolean registration(Users user) throws DaoException  {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet rs = null;
+		
 		if(findUser(user) == null) {
 			try {
 				connection = DriverManager.getConnection(DBParameter.DB_URL, DBParameter.DB_USER, DBParameter.DB_PASSWORD);
@@ -124,6 +154,10 @@ public class UserDAO implements IUserDAO {
 	
 	@Override
 	public Users findUser(Users user) throws DaoException {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet rs = null;
+		
 		try {
 			connection = DriverManager.getConnection(DBParameter.DB_URL, DBParameter.DB_USER, DBParameter.DB_PASSWORD);
 			preparedStatement = connection.prepareStatement("select * from users where login = ?");
