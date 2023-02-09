@@ -11,15 +11,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class UserDAO implements IUserDAO {		
 	@Override
 	public boolean logination(Users user) throws DaoException {	
-		if(findUser(user) != null) {
-			if(user.getPassword().equals(findUser(user).getPassword())) {
-				return true;
+		String password = "";
+		
+		try(Connection connection = ConnectionPoolProvider.getInstance().takeConnection()) {
+			try(PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?")) {
+				statement.setString(1, user.getLogin());
+				try(ResultSet rs = statement.executeQuery()) {
+					while (rs.next()) {
+			        	password = rs.getString("password");
+			        }
+					return BCrypt.checkpw(user.getPassword(), password);
+				}
 			}
+		} catch (SQLException e) {
+			throw new DaoException(e);
+		} catch (ConnectionPoolException e) {
+			throw new DaoException(e);
 		}
-		return false;
 	}
 	
 	public String getRole(Users user) throws DaoException {
@@ -32,9 +45,8 @@ public class UserDAO implements IUserDAO {
 		
 		try {
 			connection = ConnectionPoolProvider.getInstance().takeConnection();
-			preparedStatement = connection.prepareStatement("select * from users where login = ? and password = ?");
+			preparedStatement = connection.prepareStatement("select * from users where login = ?");
 	        preparedStatement.setString(1, user.getLogin());
-	        preparedStatement.setString(2, user.getPassword());
 	            
 	        resultSet = preparedStatement.executeQuery();
 	        while (resultSet.next()) {
@@ -71,6 +83,8 @@ public class UserDAO implements IUserDAO {
 		
 		if(findUser(user) == null) {
 			try {
+				user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+				
 				connection = ConnectionPoolProvider.getInstance().takeConnection();
 				preparedStatement = connection.prepareStatement("insert into Users(login, password, roles_id) VALUES (?, ?, 2)");
 		        preparedStatement.setString(1, user.getLogin());
