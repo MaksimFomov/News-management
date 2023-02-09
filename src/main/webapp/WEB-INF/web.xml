@@ -24,5 +24,20 @@
 	<error-page>
 		<location>/controller?command=go_to_error_page</location>
 	</error-page>
+	
+	<listener>
+		<listener-class>by.htp.ex.controller.listeners.AppContextListener</listener-class>
+	</listener>
+	
+	<filter>
+		<display-name>SessionFilter</display-name>
+		<filter-name>SessionFilter</filter-name>
+		<filter-class>by.htp.ex.controller.filters.SessionFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>SessionFilter</filter-name>
+		<url-pattern>/controller</url-pattern>
+	</filter-mapping>
 </web-app>
 

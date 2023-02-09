@@ -18,21 +18,22 @@ public class ConnectionPool {
     private int poolSize;
 
     public ConnectionPool() {
-    	DBResourceManager dbResourseManager = DBResourceManager.getInstance(); 
-    	this.driverName = dbResourseManager.getValue(DBParameter.DB_DRIVER); 
-    	this.url = dbResourseManager.getValue(DBParameter.DB_URL);
-    	this.user = dbResourseManager.getValue(DBParameter.DB_USER);
-    	this.password = dbResourseManager.getValue(DBParameter.DB_PASSWORD);
+    	//DBResourceManager dbResourseManager = DBResourceManager.getInstance(); 
+        this.driverName = (DBParameter.DB_DRIVER);
+        this.url = (DBParameter.DB_URL);
+        this.user = DBParameter.DB_USER;
+        this.password = (DBParameter.DB_PASSWORD);
+        this.poolSize = (DBParameter.DB_POLL_SIZE);
     	
-    	try {
+    	/*try {
     		this.poolSize = Integer.parseInt(dbResourseManager.getValue(DBParameter.DB_POLL_SIZE));
     	} catch (NumberFormatException e) { 
     		poolSize = 5;
-    	}
+    	}*/
     }
     
     public void initPoolData() throws ConnectionPoolException {
-        Locale.setDefault(Locale.ENGLISH);
+        //Locale.setDefault(Locale.ENGLISH);
         
         try {
             Class.forName(driverName);

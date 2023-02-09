@@ -3,15 +3,15 @@ package by.htp.ex.dao.impl;
 import by.htp.ex.bean.Users;
 import by.htp.ex.dao.DaoException;
 import by.htp.ex.dao.IUserDAO;
-import by.htp.ex.dao.connectionPool.DBParameter;
+import by.htp.ex.dao.connectionPool.ConnectionPoolException;
+import by.htp.ex.dao.connectionPool.ConnectionPoolProvider;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDAO implements IUserDAO {	
+public class UserDAO implements IUserDAO {		
 	@Override
 	public boolean logination(Users user) throws DaoException {	
 		if(findUser(user) != null) {
@@ -25,83 +25,41 @@ public class UserDAO implements IUserDAO {
 	public String getRole(Users user) throws DaoException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-		ResultSet rs = null;
+		ResultSet resultSet = null;
 		
 		int id = 0;
 		String role = "guest";
 		
 		try {
-			connection = DriverManager.getConnection(DBParameter.DB_URL, DBParameter.DB_USER, DBParameter.DB_PASSWORD);
+			connection = ConnectionPoolProvider.getInstance().takeConnection();
 			preparedStatement = connection.prepareStatement("select * from users where login = ? and password = ?");
 	        preparedStatement.setString(1, user.getLogin());
 	        preparedStatement.setString(2, user.getPassword());
 	            
-	        rs = preparedStatement.executeQuery();
-	        while (rs.next()) {
-	            id = rs.getInt("roles_id");
+	        resultSet = preparedStatement.executeQuery();
+	        while (resultSet.next()) {
+	            id = resultSet.getInt("roles_id");
             }
 		} catch (SQLException e) {
 			printSQLException(e);
-	    } finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}			
-			try {
-				if (preparedStatement != null) {
-					preparedStatement.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+	    }  catch (ConnectionPoolException e) {
+			throw new DaoException(e);
 		}
 		
 		try {
 			preparedStatement = connection.prepareStatement("select * from roles where id = ?");
 	        preparedStatement.setInt(1, id);
 	            
-	        rs = preparedStatement.executeQuery();
-	        while (rs.next()) {
-	        	role = rs.getString("title");
+	        resultSet = preparedStatement.executeQuery();
+	        while (resultSet.next()) {
+	        	role = resultSet.getString("title");
 	        	if(role == null) {
 	        		role = "guest";
 	        	}
 	        }
 		} catch (SQLException e) {
 			printSQLException(e);
-	    } finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}			
-			try {
-				if (preparedStatement != null) {
-					preparedStatement.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-	    }
+	    } 
 		
 		return role;
 	}
@@ -110,11 +68,10 @@ public class UserDAO implements IUserDAO {
 	public boolean registration(Users user) throws DaoException  {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-		ResultSet rs = null;
 		
 		if(findUser(user) == null) {
 			try {
-				connection = DriverManager.getConnection(DBParameter.DB_URL, DBParameter.DB_USER, DBParameter.DB_PASSWORD);
+				connection = ConnectionPoolProvider.getInstance().takeConnection();
 				preparedStatement = connection.prepareStatement("insert into Users(login, password, roles_id) VALUES (?, ?, 2)");
 		        preparedStatement.setString(1, user.getLogin());
 		        preparedStatement.setString(2, user.getPassword());
@@ -123,31 +80,9 @@ public class UserDAO implements IUserDAO {
 		        return true;
 			} catch (SQLException e) {
 				printSQLException(e);
-		    } finally {
-				try {
-					if (rs != null) {
-						rs.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				
-				try {
-					if (preparedStatement != null) {
-						preparedStatement.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				
-				try {
-					if (connection != null) {
-						connection.close();
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+			}  catch (ConnectionPoolException e) {
+				throw new DaoException(e);
+			} 
 		}
 		return false;
 	}
@@ -159,7 +94,7 @@ public class UserDAO implements IUserDAO {
 		ResultSet rs = null;
 		
 		try {
-			connection = DriverManager.getConnection(DBParameter.DB_URL, DBParameter.DB_USER, DBParameter.DB_PASSWORD);
+			connection = ConnectionPoolProvider.getInstance().takeConnection();
 			preparedStatement = connection.prepareStatement("select * from users where login = ?");
 	        preparedStatement.setString(1, user.getLogin());
 	           
@@ -176,30 +111,8 @@ public class UserDAO implements IUserDAO {
 
 		} catch (SQLException e) {
 			printSQLException(e);
-	    } finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if (preparedStatement != null) {
-					preparedStatement.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		}  catch (ConnectionPoolException e) {
+			throw new DaoException(e);
 		}
 
 		return user;
