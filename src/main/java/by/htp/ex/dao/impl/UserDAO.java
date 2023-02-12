@@ -16,62 +16,53 @@ import org.mindrot.jbcrypt.BCrypt;
 public class UserDAO implements IUserDAO {		
 	@Override
 	public boolean logination(Users user) throws DaoException {	
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		
 		String password = "";
 		
-		try(Connection connection = ConnectionPoolProvider.getInstance().takeConnection()) {
-			try(PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?")) {
-				statement.setString(1, user.getLogin());
-				try(ResultSet rs = statement.executeQuery()) {
-					while (rs.next()) {
-			        	password = rs.getString("password");
-			        }
-					return BCrypt.checkpw(user.getPassword(), password);
-				}
-			}
+		try {
+			connection = ConnectionPoolProvider.getInstance().takeConnection();
+			statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?"); 
+			statement.setString(1, user.getLogin());
+			resultSet = statement.executeQuery();
+			
+			if (resultSet.next()) {
+				password = resultSet.getString("password");
+				
+				return BCrypt.checkpw(user.getPassword(), password);
+			} 
 		} catch (SQLException e) {
 			throw new DaoException(e);
 		} catch (ConnectionPoolException e) {
 			throw new DaoException(e);
 		}
+		
+		return false;
 	}
 	
 	public String getRole(Users user) throws DaoException {
 		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		
-		int id = 0;
 		String role = "guest";
 		
 		try {
 			connection = ConnectionPoolProvider.getInstance().takeConnection();
-			preparedStatement = connection.prepareStatement("select * from users where login = ?");
-	        preparedStatement.setString(1, user.getLogin());
-	            
-	        resultSet = preparedStatement.executeQuery();
-	        while (resultSet.next()) {
-	            id = resultSet.getInt("roles_id");
-            }
+			statement = connection.prepareStatement("SELECT * FROM users JOIN roles ON users.roles_id = roles.id WHERE users.login = ?");
+			statement.setString(1, user.getLogin());
+	        resultSet = statement.executeQuery();
+	        
+	        if (resultSet.next()) {
+				role = resultSet.getString("title");
+			} 
 		} catch (SQLException e) {
-			printSQLException(e);
+			throw new DaoException(e);
 	    }  catch (ConnectionPoolException e) {
 			throw new DaoException(e);
 		}
-		
-		try {
-			preparedStatement = connection.prepareStatement("select * from roles where id = ?");
-	        preparedStatement.setInt(1, id);
-	            
-	        resultSet = preparedStatement.executeQuery();
-	        while (resultSet.next()) {
-	        	role = resultSet.getString("title");
-	        	if(role == null) {
-	        		role = "guest";
-	        	}
-	        }
-		} catch (SQLException e) {
-			printSQLException(e);
-	    } 
 		
 		return role;
 	}
@@ -79,72 +70,46 @@ public class UserDAO implements IUserDAO {
 	@Override
 	public boolean registration(Users user) throws DaoException  {
 		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+		PreparedStatement statement = null;
 		
-		if(findUser(user) == null) {
+		if(!findUserByLogin(user.getLogin())) {
 			try {
 				user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 				
 				connection = ConnectionPoolProvider.getInstance().takeConnection();
-				preparedStatement = connection.prepareStatement("insert into Users(login, password, roles_id) VALUES (?, ?, 2)");
-		        preparedStatement.setString(1, user.getLogin());
-		        preparedStatement.setString(2, user.getPassword());
-		           
-		        preparedStatement.executeUpdate();
+				statement = connection.prepareStatement("INSERT INTO Users(login, password, roles_id) VALUES (?, ?, 2)");
+				statement.setString(1, user.getLogin());
+				statement.setString(2, user.getPassword());
+				statement.executeUpdate();
+		        
 		        return true;
 			} catch (SQLException e) {
-				printSQLException(e);
+				throw new DaoException(e);
 			}  catch (ConnectionPoolException e) {
 				throw new DaoException(e);
 			} 
 		}
+		
 		return false;
 	}
 	
 	@Override
-	public Users findUser(Users user) throws DaoException {
+	public boolean findUserByLogin(String login) throws DaoException {
 		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet rs = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
 		
 		try {
 			connection = ConnectionPoolProvider.getInstance().takeConnection();
-			preparedStatement = connection.prepareStatement("select * from users where login = ?");
-	        preparedStatement.setString(1, user.getLogin());
-	           
-	        rs = preparedStatement.executeQuery();
-	        if(rs.next() == false) {
-	        	user = null;
-	        }   
-	        else {
-		        while (rs.next()) {
-		            user.setPassword(rs.getString("password"));
-		            user.setRoles_id(rs.getInt("roles_id"));
-		        }
-	        }	        
-
+			statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?");
+			statement.setString(1, login);
+			resultSet = statement.executeQuery();
+			
+			return resultSet.next(); 
 		} catch (SQLException e) {
-			printSQLException(e);
+			throw new DaoException(e);
 		}  catch (ConnectionPoolException e) {
 			throw new DaoException(e);
 		}
-
-		return user;
 	}
-	
-	private void printSQLException(SQLException ex) {
-        for (Throwable e: ex) {
-            if (e instanceof SQLException) {
-                e.printStackTrace(System.err);
-                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
-                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
-                System.err.println("Message: " + e.getMessage());
-                Throwable t = ex.getCause();
-                while (t != null) {
-                    System.out.println("Cause: " + t);
-                    t = t.getCause();
-                }
-            }
-        }
-    }
 }
