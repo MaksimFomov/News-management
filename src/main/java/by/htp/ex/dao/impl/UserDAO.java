@@ -39,9 +39,9 @@ public class UserDAO implements IUserDAO {
 				return BCrypt.checkpw(user.getPassword(), password);
 			} 
 		} catch (SQLException e) {
-			throw new DaoException(e);
+			throw new DaoException("sql error", e);
 		} catch (ConnectionPoolException e) {
-			throw new DaoException(e);
+			throw new DaoException("error trying to take connection", e);
 		}
 		
 		return false;
@@ -60,9 +60,9 @@ public class UserDAO implements IUserDAO {
 				role = resultSet.getString(DB_FIELD_TITLE);
 			} 
 		} catch (SQLException e) {
-			throw new DaoException(e);
+			throw new DaoException("sql error", e);
 	    }  catch (ConnectionPoolException e) {
-			throw new DaoException(e);
+			throw new DaoException("error trying to take connection", e);
 		}
 		
 		return role;
@@ -81,9 +81,9 @@ public class UserDAO implements IUserDAO {
 		        
 		        return true;
 			} catch (SQLException e) {
-				throw new DaoException(e);
+				throw new DaoException("sql error", e);
 			}  catch (ConnectionPoolException e) {
-				throw new DaoException(e);
+				throw new DaoException("error trying to take connection", e);
 			} 
 		}
 		
@@ -102,9 +102,9 @@ public class UserDAO implements IUserDAO {
 			
 			return resultSet.next(); 
 		} catch (SQLException e) {
-			throw new DaoException(e);
+			throw new DaoException("sql error", e);
 		}  catch (ConnectionPoolException e) {
-			throw new DaoException(e);
+			throw new DaoException("error trying to take connection", e);
 		}
 	}
 }
