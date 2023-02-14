@@ -13,7 +13,20 @@ public class DoChangeLanguage implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         session.setAttribute("local", request.getParameter("local"));
+        
+        try {
+            String lastRequest = (String)session.getAttribute("last_request");
 
-        response.sendRedirect("controller?command=go_to_news_list");
+            if(lastRequest != null) {
+                response.sendRedirect(lastRequest);
+            } 
+            else {
+                session.setAttribute("error_msg", "error getting last request");
+                response.sendRedirect("controller?command=go_to_error_page");
+            }
+        } catch (Exception e) {
+            session.setAttribute("error_msg", "error getting last request");
+            response.sendRedirect("controller?command=go_to_error_page");
+        }
     }
 }

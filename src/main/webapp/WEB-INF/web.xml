@@ -35,8 +35,19 @@
 		<filter-class>by.htp.ex.controller.filters.SessionFilter</filter-class>
 	</filter>
 	
+	<filter>
+		<display-name>PreviousRequestFilter</display-name>
+		<filter-name>PreviousRequestFilter</filter-name>
+		<filter-class>by.htp.ex.controller.filters.PreviousRequestFilter</filter-class>
+	</filter>
+	
 	<filter-mapping>
 		<filter-name>SessionFilter</filter-name>
+		<url-pattern>/controller</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>PreviousRequestFilter</filter-name>
 		<url-pattern>/controller</url-pattern>
 	</filter-mapping>
 </web-app>
