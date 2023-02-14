@@ -14,6 +14,11 @@ import java.sql.SQLException;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class UserDAO implements IUserDAO {		
+	private static final String SQL_QUERY_FOR_LOGINATION_AND_FIND_USER_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
+	private static final String SQL_QUERY_FOR_GET_ROLE = "SELECT * FROM users JOIN roles ON users.roles_id = roles.id WHERE users.login = ?";
+	private static final String SQL_QUERY_FOR_REGISTRATION = "INSERT INTO Users(login, password, roles_id) VALUES (?, ?, 2)";
+	
+	
 	@Override
 	public boolean logination(Users user) throws DaoException {	
 		ResultSet resultSet = null;
@@ -21,7 +26,7 @@ public class UserDAO implements IUserDAO {
 		String password = "";
 		
 		try (Connection connection = ConnectionPoolProvider.getInstance().takeConnection();
-				PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?")) {
+				PreparedStatement statement = connection.prepareStatement(SQL_QUERY_FOR_LOGINATION_AND_FIND_USER_BY_LOGIN)) {
 			statement.setString(1, user.getLogin());
 			
 			resultSet = statement.executeQuery();
@@ -45,7 +50,7 @@ public class UserDAO implements IUserDAO {
 		String role = "guest";
 		
 		try (Connection connection = ConnectionPoolProvider.getInstance().takeConnection();
-				PreparedStatement statement = connection.prepareStatement("SELECT * FROM users JOIN roles ON users.roles_id = roles.id WHERE users.login = ?")) {
+				PreparedStatement statement = connection.prepareStatement(SQL_QUERY_FOR_GET_ROLE)) {
 			statement.setString(1, user.getLogin());
 			
 	        resultSet = statement.executeQuery();
@@ -62,16 +67,12 @@ public class UserDAO implements IUserDAO {
 	}
 
 	@Override
-	public boolean registration(Users user) throws DaoException  {
-		Connection connection = null;
-		PreparedStatement statement = null;
-		
+	public boolean registration(Users user) throws DaoException  {		
 		if(!findUserByLogin(user.getLogin())) {
-			try {
+			try(Connection connection = ConnectionPoolProvider.getInstance().takeConnection();
+					PreparedStatement statement = connection.prepareStatement(SQL_QUERY_FOR_REGISTRATION)) {
 				user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 				
-				connection = ConnectionPoolProvider.getInstance().takeConnection();
-				statement = connection.prepareStatement("INSERT INTO Users(login, password, roles_id) VALUES (?, ?, 2)");
 				statement.setString(1, user.getLogin());
 				statement.setString(2, user.getPassword());
 				statement.executeUpdate();
@@ -92,7 +93,7 @@ public class UserDAO implements IUserDAO {
 		ResultSet resultSet = null;
 		
 		try(Connection connection = ConnectionPoolProvider.getInstance().takeConnection();
-				PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?");) {
+				PreparedStatement statement = connection.prepareStatement(SQL_QUERY_FOR_LOGINATION_AND_FIND_USER_BY_LOGIN)) {
 			statement.setString(1, login);
 			
 			resultSet = statement.executeQuery();
