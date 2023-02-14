@@ -1,7 +1,6 @@
 package by.htp.ex.dao.connection_pool;
 
 import java.sql.*;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -9,8 +8,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
 public class ConnectionPool {
+	private final static ConnectionPool connectionPool = new ConnectionPool();
+	
     private BlockingQueue<Connection> connectionQueue;
     private BlockingQueue<Connection> givenAwayConQueue;
+    
     private String driverName;
     private String url;
     private String user;
@@ -18,23 +20,25 @@ public class ConnectionPool {
     private int poolSize;
 
     public ConnectionPool() {
-    	//DBResourceManager dbResourseManager = DBResourceManager.getInstance(); 
-        this.driverName = (DBParameter.DB_DRIVER);
-        this.url = (DBParameter.DB_URL);
-        this.user = DBParameter.DB_USER;
-        this.password = (DBParameter.DB_PASSWORD);
-        this.poolSize = (DBParameter.DB_POLL_SIZE);
-    	
-    	/*try {
-    		this.poolSize = Integer.parseInt(dbResourseManager.getValue(DBParameter.DB_POLL_SIZE));
-    	} catch (NumberFormatException e) { 
-    		poolSize = 5;
-    	}*/
+    	DBResourceManager dbResourseManager = DBResourceManager.getInstance();
+
+		this.driverName = dbResourseManager.getValue(DBParameter.DB_DRIVER);
+		this.url = dbResourseManager.getValue(DBParameter.DB_URL);
+		this.user = dbResourseManager.getValue(DBParameter.DB_USER);
+		this.password = dbResourseManager.getValue(DBParameter.DB_PASSWORD);
+
+		try {
+			this.poolSize = Integer.parseInt(dbResourseManager.getValue(DBParameter.DB_POLL_SIZE));
+		} catch (NumberFormatException e) {
+			poolSize = 5;
+		}
     }
     
-    public void initPoolData() throws ConnectionPoolException {
-        //Locale.setDefault(Locale.ENGLISH);
-        
+	public static ConnectionPool getInstance() {
+		return connectionPool;
+	}
+    
+    public void initPoolData() throws ConnectionPoolException {        
         try {
             Class.forName(driverName);
             givenAwayConQueue = new ArrayBlockingQueue<Connection>(poolSize);

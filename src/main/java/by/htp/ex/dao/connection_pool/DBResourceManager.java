@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 public class DBResourceManager {
 	private final static DBResourceManager instance = new DBResourceManager(); 
 	
-	private ResourceBundle bundle = ResourceBundle.getBundle("_java._se._07._connectionpool.db"); 
+	private ResourceBundle bundle = ResourceBundle.getBundle("database.db"); 
 	
 	public static DBResourceManager getInstance() {
 		return instance;
