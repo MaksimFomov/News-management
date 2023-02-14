@@ -11,30 +11,44 @@ public class PreviousRequestFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {}
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
     	HttpServletRequest req = (HttpServletRequest) request;
     	
         if (req.getMethod().equals(HttpMethod.GET)) {
             HttpSession session = req.getSession(false);
             Map<String, String[]> paramsMap = req.getParameterMap();
+            StringBuilder lastRequest;
+        	String lastRequestName;
+        	Map<String, String[]> lastRequestParams;
 
             if (!paramsMap.isEmpty()) {
-                session.setAttribute("last_request_name", session.getAttribute("current_request_name"));
-                session.setAttribute("last_request_params", session.getAttribute("current_request_params"));                          
+                lastRequestName = (String)session.getAttribute("current_request_name");
+                lastRequestParams = (Map<String, String[]>)session.getAttribute("current_request_params");                          
 
                 session.setAttribute("current_request_name", req.getRequestURL().toString());
                 session.setAttribute("current_request_params", paramsMap);
 
-                if (session.getAttribute("last_request_name") == null) {
-                    session.setAttribute("last_request_name", session.getAttribute("current_request_name"));
-                    session.setAttribute("last_request_params", session.getAttribute("current_request_params"));
+                if (lastRequestName == null) {
+                    lastRequestName = (String)session.getAttribute("current_request_name");
+                    lastRequestParams = (Map<String, String[]>)session.getAttribute("current_request_params");  
                 }
                 
-                String lastRequestName = (String)session.getAttribute("last_request_name");
-                Map<String, String[]> lastRequestParams = (Map<String, String[]>)session.getAttribute("last_request_params");
-                
-                session.setAttribute("last_request", getLastRequest(lastRequestName, lastRequestParams));
+                lastRequest = new StringBuilder(lastRequestName);
+                try {                    
+                    lastRequest.append("?");
+                    for (var paramArray : lastRequestParams.entrySet()) {
+                        for(var param : paramArray.getValue()) {
+                            lastRequest.append(paramArray.getKey()).append("=").append(param).append("&");
+                        }
+                    }
+                    lastRequest.deleteCharAt(lastRequest.length() - 1);
+                    
+                    session.setAttribute("last_request", lastRequest.toString());
+                } catch (Exception e) {
+                    session.setAttribute("last_request", null);
+                }
             }
         }
         chain.doFilter(request, response);
@@ -42,24 +56,4 @@ public class PreviousRequestFilter implements Filter {
 
     @Override
     public void destroy() {}
-    
-    public static String getLastRequest(String requestName, Map<String, String[]> requestParams) {
-        StringBuilder lastRequest = new StringBuilder(requestName);
-        
-        try {
-            Map<String, String[]> paramsMap = requestParams;
-            
-            lastRequest.append("?");
-            for (var paramArray : paramsMap.entrySet()) {
-                for(var param : paramArray.getValue()) {
-                    lastRequest.append(paramArray.getKey()).append("=").append(param).append("&");
-                }
-            }
-            lastRequest.deleteCharAt(lastRequest.length() - 1);
-            
-            return lastRequest.toString();
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }
