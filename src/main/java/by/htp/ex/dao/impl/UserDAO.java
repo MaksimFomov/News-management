@@ -16,18 +16,15 @@ import org.mindrot.jbcrypt.BCrypt;
 public class UserDAO implements IUserDAO {		
 	@Override
 	public boolean logination(Users user) throws DaoException {	
-		Connection connection = null;
-		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		
 		String password = "";
 		
-		try {
-			connection = ConnectionPoolProvider.getInstance().takeConnection();
-			statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?"); 
+		try (Connection connection = ConnectionPoolProvider.getInstance().takeConnection();
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?")) {
 			statement.setString(1, user.getLogin());
-			resultSet = statement.executeQuery();
 			
+			resultSet = statement.executeQuery();
 			if (resultSet.next()) {
 				password = resultSet.getString("password");
 				
@@ -43,18 +40,15 @@ public class UserDAO implements IUserDAO {
 	}
 	
 	public String getRole(Users user) throws DaoException {
-		Connection connection = null;
-		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		
 		String role = "guest";
 		
-		try {
-			connection = ConnectionPoolProvider.getInstance().takeConnection();
-			statement = connection.prepareStatement("SELECT * FROM users JOIN roles ON users.roles_id = roles.id WHERE users.login = ?");
+		try (Connection connection = ConnectionPoolProvider.getInstance().takeConnection();
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM users JOIN roles ON users.roles_id = roles.id WHERE users.login = ?")) {
 			statement.setString(1, user.getLogin());
+			
 	        resultSet = statement.executeQuery();
-	        
 	        if (resultSet.next()) {
 				role = resultSet.getString("title");
 			} 
@@ -95,14 +89,12 @@ public class UserDAO implements IUserDAO {
 	
 	@Override
 	public boolean findUserByLogin(String login) throws DaoException {
-		Connection connection = null;
-		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		
-		try {
-			connection = ConnectionPoolProvider.getInstance().takeConnection();
-			statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?");
+		try(Connection connection = ConnectionPoolProvider.getInstance().takeConnection();
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?");) {
 			statement.setString(1, login);
+			
 			resultSet = statement.executeQuery();
 			
 			return resultSet.next(); 
