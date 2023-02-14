@@ -1,4 +1,4 @@
-package by.htp.ex.dao.connectionPool;
+package by.htp.ex.dao.connection_pool;
 
 import java.sql.*;
 import java.util.Locale;

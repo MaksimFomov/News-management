@@ -3,8 +3,8 @@ package by.htp.ex.dao.impl;
 import by.htp.ex.bean.Users;
 import by.htp.ex.dao.DaoException;
 import by.htp.ex.dao.IUserDAO;
-import by.htp.ex.dao.connectionPool.ConnectionPoolException;
-import by.htp.ex.dao.connectionPool.ConnectionPoolProvider;
+import by.htp.ex.dao.connection_pool.ConnectionPoolException;
+import by.htp.ex.dao.connection_pool.ConnectionPoolProvider;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

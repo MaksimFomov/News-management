@@ -1,7 +1,7 @@
 package by.htp.ex.controller.listeners;
 
-import by.htp.ex.dao.connectionPool.ConnectionPoolException;
-import by.htp.ex.dao.connectionPool.ConnectionPoolProvider;
+import by.htp.ex.dao.connection_pool.ConnectionPoolException;
+import by.htp.ex.dao.connection_pool.ConnectionPoolProvider;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 

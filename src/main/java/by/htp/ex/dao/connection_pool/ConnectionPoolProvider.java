@@ -1,4 +1,4 @@
-package by.htp.ex.dao.connectionPool;
+package by.htp.ex.dao.connection_pool;
 
 public class ConnectionPoolProvider {
     private final static ConnectionPool instance = new ConnectionPool();

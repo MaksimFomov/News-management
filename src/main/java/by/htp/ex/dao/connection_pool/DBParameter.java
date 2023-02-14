@@ -1,4 +1,4 @@
-package by.htp.ex.dao.connectionPool;
+package by.htp.ex.dao.connection_pool;
 
 public final class DBParameter {
 	private DBParameter(){}
