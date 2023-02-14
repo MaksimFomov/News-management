@@ -18,12 +18,15 @@ public class UserDAO implements IUserDAO {
 	private static final String SQL_QUERY_FOR_GET_ROLE = "SELECT * FROM users JOIN roles ON users.roles_id = roles.id WHERE users.login = ?";
 	private static final String SQL_QUERY_FOR_REGISTRATION = "INSERT INTO Users(login, password, roles_id) VALUES (?, ?, 2)";
 	
+	private static final String DB_FIELD_PASSWORD = "password";
+	private static final String DB_FIELD_TITLE = "title";
+	
+	private static final String ROLE_GUEST = "guest";
 	
 	@Override
 	public boolean logination(Users user) throws DaoException {	
 		ResultSet resultSet = null;
-		
-		String password = "";
+		String password = null;
 		
 		try (Connection connection = ConnectionPoolProvider.getInstance().takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SQL_QUERY_FOR_LOGINATION_AND_FIND_USER_BY_LOGIN)) {
@@ -31,7 +34,7 @@ public class UserDAO implements IUserDAO {
 			
 			resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				password = resultSet.getString("password");
+				password = resultSet.getString(DB_FIELD_PASSWORD);
 				
 				return BCrypt.checkpw(user.getPassword(), password);
 			} 
@@ -46,8 +49,7 @@ public class UserDAO implements IUserDAO {
 	
 	public String getRole(Users user) throws DaoException {
 		ResultSet resultSet = null;
-		
-		String role = "guest";
+		String role = ROLE_GUEST;
 		
 		try (Connection connection = ConnectionPoolProvider.getInstance().takeConnection();
 				PreparedStatement statement = connection.prepareStatement(SQL_QUERY_FOR_GET_ROLE)) {
@@ -55,7 +57,7 @@ public class UserDAO implements IUserDAO {
 			
 	        resultSet = statement.executeQuery();
 	        if (resultSet.next()) {
-				role = resultSet.getString("title");
+				role = resultSet.getString(DB_FIELD_TITLE);
 			} 
 		} catch (SQLException e) {
 			throw new DaoException(e);
