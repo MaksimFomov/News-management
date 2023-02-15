@@ -14,10 +14,12 @@ import java.io.IOException;
 public class DoDeleteNews implements Command {
 	private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
 	
+	private static final String JSP_ID_PARAM = "id";
+	
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        String[] newsIds = request.getParameterValues("id");
+        String[] newsIds = request.getParameterValues(JSP_ID_PARAM);
         
         if (newsIds != null) {
             try {

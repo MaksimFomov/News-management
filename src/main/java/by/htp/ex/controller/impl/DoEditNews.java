@@ -15,17 +15,23 @@ import java.io.IOException;
 public class DoEditNews implements Command {
     private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
     
+	private static final String JSP_ID_PARAM = "id";
+	private static final String JSP_NEWS_TITLE_PARAM = "news_title";
+	private static final String JSP_NEWS_BRIEF_PARAM = "news_brief";
+	private static final String JSP_NEWS_CONTENT_PARAM = "news_content";
+	private static final String JSP_NEWS_DATE_PARAM = "news_date";
+    
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        int id = Integer.parseInt(request.getParameter("id"));
+        int id = Integer.parseInt(request.getParameter(JSP_ID_PARAM));
         
         News newNews = new News(
         		id,
-        		request.getParameter("news_title"), 
-        		request.getParameter("news_brief"), 
-        		request.getParameter("news_content"), 
-        		request.getParameter("news_date"));
+        		request.getParameter(JSP_NEWS_TITLE_PARAM), 
+        		request.getParameter(JSP_NEWS_BRIEF_PARAM), 
+        		request.getParameter(JSP_NEWS_CONTENT_PARAM), 
+        		request.getParameter(JSP_NEWS_DATE_PARAM));
         
         try {
             newsService.update(newNews);

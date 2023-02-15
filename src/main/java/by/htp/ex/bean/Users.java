@@ -6,8 +6,7 @@ import java.util.Objects;
 public class Users implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public Users() {
-	}
+	public Users() {}
 
 	public Users(int id, String login, String password, int roles_id) {
 		this.id = id;
