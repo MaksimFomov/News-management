@@ -12,7 +12,6 @@ public class GoToRegistrationPage implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("presentation", "registration");
-		
 		request.getRequestDispatcher("WEB-INF/pages/layouts/baseLayout.jsp").forward(request, response);
 	}
 }

@@ -18,7 +18,6 @@ public class DoEditNews implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-
         int id = Integer.parseInt(request.getParameter("id"));
         
         News newNews = new News(

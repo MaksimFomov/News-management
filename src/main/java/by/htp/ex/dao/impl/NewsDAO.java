@@ -15,8 +15,8 @@ import by.htp.ex.dao.connection_pool.ConnectionPoolException;
 
 public class NewsDAO implements INewsDAO {
 	private static final String SQL_QUERY_FOR_GET_NEWS_LIST = "SELECT * FROM news";
-	private static final String SQL_QUERY_FOR_ADD_NEWS = "INSERT INTO news(title, brief, content, date, user_id) VALUES (?, ?, ?, ?, 7)"; //Add user id
-	private static final String SQL_QUERY_FOR_UPDATE_NEWS = "UPDATE news SET title = ?, brief = ?, content = ?, date = ?, user_id = 7 WHERE id = ?"; //Add user id
+	private static final String SQL_QUERY_FOR_ADD_NEWS = "INSERT INTO news(title, brief, content, date, user_id) VALUES (?, ?, ?, ?, 7)"; 
+	private static final String SQL_QUERY_FOR_UPDATE_NEWS = "UPDATE news SET title = ?, brief = ?, content = ?, date = ?, user_id = 7 WHERE id = ?"; 
 	private static final String SQL_QUERY_FOR_DELETE_NEWS = "DELETE FROM news WHERE id = ?";
 	
 	@Override

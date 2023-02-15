@@ -37,7 +37,6 @@ public class DoRegistration implements Command {
 			response.sendRedirect("controller?command=go_to_base_page");
 		} catch (ServiceException e) {
 			session.setAttribute("error_msg", "register error");
-			
 			response.sendRedirect("controller?command=go_to_error_page");
 		}
 	}

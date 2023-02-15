@@ -12,7 +12,6 @@ public class DoSignOut implements Command {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		
 		session.setAttribute("userActivity", "not active");
 		session.setAttribute("role", "guest");
 		

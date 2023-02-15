@@ -31,18 +31,17 @@ public class DoSignIn implements Command {
 
 			if (!"guest".equals(role)) {
 				session.setAttribute("userActivity", "active");
-				session.setAttribute("role", role);
+				session.setAttribute("role", role);	
 				
 				response.sendRedirect("controller?command=go_to_news_list");
 			} else {
 				session.setAttribute("userActivity", "not active");
 				session.setAttribute("auth_error", "wrong login or password");
-
+				
 				response.sendRedirect("controller?command=go_to_base_page");
 			}
 		} catch (ServiceException e) {
 			session.setAttribute("error_msg", "sign in error");
-			
 			response.sendRedirect("controller?command=go_to_error_page");
 		}
 	}

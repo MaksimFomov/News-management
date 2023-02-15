@@ -28,7 +28,6 @@ public class GoToNewsList implements Command {
 			}
 			
 			request.setAttribute("presentation", "newsList");
-
 			request.getRequestDispatcher("WEB-INF/pages/layouts/baseLayout.jsp").forward(request, response);
 		} catch (ServiceException e) {
 			HttpSession session = request.getSession(false);

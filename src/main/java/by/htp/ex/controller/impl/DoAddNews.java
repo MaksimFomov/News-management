@@ -18,12 +18,14 @@ public class DoAddNews implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	HttpSession session = request.getSession(false);
-
-        News newNews = new News();
-        newNews.setTitle(request.getParameter("news_title"));
-        newNews.setBrief(request.getParameter("news_brief"));
-        newNews.setContent(request.getParameter("news_content"));
-        newNews.setDate(request.getParameter("news_date"));
+    	int id = Integer.parseInt(request.getParameter("id"));
+        
+        News newNews = new News(
+        		id,
+        		request.getParameter("news_title"), 
+        		request.getParameter("news_brief"), 
+        		request.getParameter("news_content"), 
+        		request.getParameter("news_date"));
 
         try {
             newsService.add(newNews);
