@@ -5,6 +5,11 @@ import java.util.Objects;
 
 public class Users implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	private int id;
+	private String login;
+	private String password;
+	private int roles_id;
 
 	public Users() {}
 
@@ -14,11 +19,6 @@ public class Users implements Serializable {
 		this.password = password;
 		this.roles_id = roles_id;
 	}
-
-	private int id;
-	private String login;
-	private String password;
-	private int roles_id;
 	
 	public int getId() {
 		return id;

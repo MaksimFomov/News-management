@@ -5,7 +5,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 public class News implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id = 0;
