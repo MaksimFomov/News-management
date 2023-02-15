@@ -13,23 +13,27 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class DoEditNews implements Command {
-	private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
-	
+    private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
+    
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
 
-        int id = Integer.parseInt(request.getParameter("idNews"));
-        News newNews = new News(id,request.getParameter("news_title"), request.getParameter("news_brief"), request.getParameter("news_content"),request.getParameter("news_date"));
-       
+        int id = Integer.parseInt(request.getParameter("id"));
+        
+        News newNews = new News(
+        		id,
+        		request.getParameter("news_title"), 
+        		request.getParameter("news_brief"), 
+        		request.getParameter("news_content"), 
+        		request.getParameter("news_date"));
+        
         try {
             newsService.update(newNews);
             session.setAttribute("save_success", "suc");
-            
             response.sendRedirect("controller?command=go_to_news_list");
         } catch (ServiceException e) {
             session.setAttribute("error_msg", "update error");
-            
             response.sendRedirect("controller?command=go_to_error_page");
         }
     }

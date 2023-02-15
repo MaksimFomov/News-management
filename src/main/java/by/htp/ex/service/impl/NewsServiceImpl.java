@@ -1,8 +1,5 @@
 package by.htp.ex.service.impl;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import by.htp.ex.bean.News;
@@ -26,16 +23,7 @@ public class NewsServiceImpl implements INewsService{
 
 	@Override
 	public void add(News news) throws ServiceException {
-		try {
-			String newsDate = news.getNewsDate();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-			
-			try {
-				LocalDate date = LocalDate.parse(newsDate, formatter);
-			} catch (DateTimeParseException e){
-				throw new ServiceException(e);
-			}
-			
+		try {			
 			newsDAO.addNews(news);
 		} catch (NewsDAOException e) {
 			throw new ServiceException(e);
@@ -44,16 +32,7 @@ public class NewsServiceImpl implements INewsService{
 
 	@Override
 	public void update(News news) throws ServiceException{
-		try {
-			String newsDate = news.getNewsDate();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-			
-			try {
-				LocalDate date = LocalDate.parse(newsDate, formatter);
-			} catch (DateTimeParseException e){
-				throw new ServiceException(e);
-			}
-			
+		try {			
 			newsDAO.updateNews(news);
 		} catch (NewsDAOException e) {
 			throw new ServiceException(e);
@@ -63,14 +42,7 @@ public class NewsServiceImpl implements INewsService{
 	@Override
 	public List<News> latestList(int count) throws ServiceException {
 		try {
-			List<News> latestNews = newsDAO.getLatestList(count);
-
-			latestNews.sort((o1, o2) -> {
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
-				LocalDate date1 = LocalDate.parse(o1.getNewsDate(), formatter);
-				LocalDate date2 = LocalDate.parse(o2.getNewsDate(), formatter);
-				return date2.compareTo(date1);
-			});
+			List<News> latestNews = newsDAO.getLatestNewsList(count);
 			
 			return latestNews;
 		} catch (NewsDAOException e) {
@@ -81,7 +53,7 @@ public class NewsServiceImpl implements INewsService{
 	@Override
 	public List<News> list() throws ServiceException {
 		try {
-			return newsDAO.getList();
+			return newsDAO.getNewsList();
 		} catch (NewsDAOException e) {
 			throw new ServiceException(e);
 		}

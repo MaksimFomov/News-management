@@ -16,11 +16,11 @@ ${guestinfo_head}
 				</div>
 				
 				<div class="news-date">
-					<c:out value="${news.newsDate}" />
+					<c:out value="${news.date}" />
 				</div>
 
 				<div class="news-content">
-					<c:out value="${news.briefNews}" />
+					<c:out value="${news.brief}" />
 				</div>
 			</div>
 		</div>

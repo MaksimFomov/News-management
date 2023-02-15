@@ -17,8 +17,7 @@ public class DoDeleteNews implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        
-        String[] newsIds = request.getParameterValues("idNews");
+        String[] newsIds = request.getParameterValues("id");
         
         if (newsIds != null) {
             try {

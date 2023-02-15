@@ -17,19 +17,20 @@ public class DoAddNews implements Command {
 	
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
+    	HttpSession session = request.getSession(false);
 
-        int id = Integer.parseInt(request.getParameter("idNews"));
-        News newNews = new News(id, request.getParameter("news_title"), request.getParameter("news_brief"), request.getParameter("news_content"), request.getParameter("news_date"));
-        
+        News newNews = new News();
+        newNews.setTitle(request.getParameter("news_title"));
+        newNews.setBrief(request.getParameter("news_brief"));
+        newNews.setContent(request.getParameter("news_content"));
+        newNews.setDate(request.getParameter("news_date"));
+
         try {
             newsService.add(newNews);
             session.setAttribute("save_success", "suc");
-            
             response.sendRedirect("controller?command=go_to_news_list");
         } catch (ServiceException e) {
             session.setAttribute("error_msg", "add error");
-            
             response.sendRedirect("controller?command=go_to_error_page");
         }
     }

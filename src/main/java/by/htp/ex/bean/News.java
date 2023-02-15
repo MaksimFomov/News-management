@@ -8,29 +8,29 @@ public class News implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Integer idNews = 0;
+	private Integer id = 0;
 	private String title = "";
-	private String briefNews = "";
+	private String brief = "";
 	private String content = "";
-	private String newsDate = "";
+	private String date = "";;
 	
 	public News(){}
 
-	public News(int idNews, String title, String briefNews, String content, String newsDate) {
+	public News(int id, String title, String brief, String content, String date) {
 		super();
-		this.idNews = idNews;
+		this.id = id;
 		this.title = title;
-		this.briefNews = briefNews;
+		this.brief = brief;
 		this.content = content;
-		this.newsDate = newsDate;
+		this.date = date;
 	}
 
-	public Integer getIdNews() {
-		return idNews;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdNews(Integer idNews) {
-		this.idNews = idNews;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getTitle() {
@@ -41,12 +41,12 @@ public class News implements Serializable {
 		this.title = title;
 	}
 
-	public String getBriefNews() {
-		return briefNews;
+	public String getBrief() {
+		return brief;
 	}
 
-	public void setBriefNews(String briefNews) {
-		this.briefNews = briefNews;
+	public void setBrief(String brief) {
+		this.brief = brief;
 	}
 
 	public String getContent() {
@@ -58,12 +58,12 @@ public class News implements Serializable {
 		
 	}
 
-	public String getNewsDate() {
-		return newsDate;
+	public String getDate() {
+		return date;
 	}
 
-	public void setNewsDate(String newsDate) throws DateTimeParseException {
-		this.newsDate = newsDate;
+	public void setDate(String date) throws DateTimeParseException {
+		this.date = date;
 	}
 
 	@Override
@@ -71,11 +71,11 @@ public class News implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		News news = (News) o;
-		return Objects.equals(idNews, news.idNews) && Objects.equals(title, news.title) && Objects.equals(briefNews, news.briefNews) && Objects.equals(content, news.content) && Objects.equals(newsDate, news.newsDate);
+		return Objects.equals(id, news.id) && Objects.equals(title, news.title) && Objects.equals(brief, news.brief) && Objects.equals(content, news.content) && Objects.equals(date, news.date);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(idNews, title, briefNews, content, newsDate);
+		return Objects.hash(id, title, brief, content, date);
 	}
 }
