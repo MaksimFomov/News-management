@@ -13,11 +13,17 @@ import by.htp.ex.dao.NewsDAOException;
 import by.htp.ex.dao.connection_pool.ConnectionPool;
 import by.htp.ex.dao.connection_pool.ConnectionPoolException;
 
-public class NewsDAO implements INewsDAO {
+public class NewsDAO implements INewsDAO {		
 	private static final String SQL_QUERY_FOR_GET_NEWS_LIST = "SELECT * FROM news";
 	private static final String SQL_QUERY_FOR_ADD_NEWS = "INSERT INTO news(title, brief, content, date, user_id) VALUES (?, ?, ?, ?, 7)"; 
 	private static final String SQL_QUERY_FOR_UPDATE_NEWS = "UPDATE news SET title = ?, brief = ?, content = ?, date = ?, user_id = 7 WHERE id = ?"; 
 	private static final String SQL_QUERY_FOR_DELETE_NEWS = "DELETE FROM news WHERE id = ?";
+	
+	private static final String DB_FIELD_ID = "password";
+	private static final String DB_FIELD_TITLE = "title";
+	private static final String DB_FIELD_BRIEF = "news_brief";
+	private static final String DB_FIELD_CONTENT = "news_content";
+	private static final String DB_FIELD_DATE= "news_date";
 	
 	@Override
 	public List<News> getLatestNewsList(int count) throws NewsDAOException {
@@ -35,11 +41,11 @@ public class NewsDAO implements INewsDAO {
 			
 			while (resultSet.next()) {
 				newsList.add(new News(
-						resultSet.getInt("id"),
-						resultSet.getString("title"),
-						resultSet.getString("brief"),
-						resultSet.getString("content"),
-						resultSet.getString("date")));
+						resultSet.getInt(DB_FIELD_ID),
+						resultSet.getString(DB_FIELD_TITLE),
+						resultSet.getString(DB_FIELD_BRIEF),
+						resultSet.getString(DB_FIELD_CONTENT),
+						resultSet.getString(DB_FIELD_DATE)));
 			} 
 		} catch (SQLException e) {
 			throw new NewsDAOException("sql error", e);
@@ -66,7 +72,6 @@ public class NewsDAO implements INewsDAO {
 			
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println(e);
 			throw new NewsDAOException("sql error", e);
 		} catch (ConnectionPoolException e) {
 			throw new NewsDAOException("error trying to take connection", e);
@@ -85,7 +90,6 @@ public class NewsDAO implements INewsDAO {
 			
 			statement.executeUpdate();
 		} catch (SQLException e) {
-            System.out.println(e);
 			throw new NewsDAOException("sql error", e);
 		} catch (ConnectionPoolException e) {
 			throw new NewsDAOException("error trying to take connection", e);
@@ -98,7 +102,6 @@ public class NewsDAO implements INewsDAO {
 				PreparedStatement statement = connection.prepareStatement(SQL_QUERY_FOR_DELETE_NEWS)) {	
 			for(var id: idNews) {
 				statement.setString(1, id);
-				
 				statement.executeUpdate();
 			}
 		} catch (SQLException e) {
