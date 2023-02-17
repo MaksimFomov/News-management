@@ -14,21 +14,28 @@ import java.io.IOException;
 
 public class GoToEditNews implements Command {
 	private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
+	
+	private static final String ID_PARAM = "id";
+	private static final String NEWS_PARAM = "news";
+	private static final String PRESENTATION_PARAM = "presentation";
+	private static final String PRESENTATION_LOCAL_KEY = "editNews";
+	private static final String ERROR_MESSAGE_PARAM = "error_msg";
+	private static final String ERROR_MESSAGE_LOCAL_KEY = "cannot find the news by id";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         News news;
-        String id = request.getParameter("id");
+        String id = request.getParameter(ID_PARAM);
 
         try {
             news = newsService.findById(Integer.parseInt(id));
-            request.setAttribute("news", news);
-            request.setAttribute("presentation", "editNews");
+            request.setAttribute(NEWS_PARAM, news);
+            request.setAttribute(PRESENTATION_PARAM, PRESENTATION_LOCAL_KEY);
 
             request.getRequestDispatcher("WEB-INF/pages/layouts/baseLayout.jsp").forward(request, response);
         } catch (ServiceException e) {
             HttpSession session = request.getSession(false);
-            session.setAttribute("error_msg", "cannot find the news by id");
+            session.setAttribute(ERROR_MESSAGE_PARAM, ERROR_MESSAGE_LOCAL_KEY);
             
             response.sendRedirect("controller?command=go_to_error_page");
         }

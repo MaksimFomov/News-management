@@ -17,6 +17,14 @@ public class DoSignIn implements Command {
 
 	private static final String JSP_LOGIN_PARAM = "login";
 	private static final String JSP_PASSWORD_PARAM = "password";
+	
+	private static final String ROLE_PARAM = "role";
+	private static final String USER_ACTIVITY_PARAM = "userActivity";
+	private static final String USER_ACTIVITY_ACTIVE_LOCAL_KEY = "active";
+	private static final String USER_ACTIVITY_NOT_ACTIVE_LOCAL_KEY = "not active";
+	private static final String AUTH_ERROR_MESSAGE_PARAM = "auth_error";
+	private static final String AUTH_ERROR_MESSAGE_LOCAL_KEY = "wrong login or password";
+	private static final String ERROR_MESSAGE_PARAM = "error_msg";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
@@ -30,18 +38,18 @@ public class DoSignIn implements Command {
 			String role = service.signIn(user);
 
 			if (!"guest".equals(role)) {
-				session.setAttribute("userActivity", "active");
-				session.setAttribute("role", role);	
+				session.setAttribute(USER_ACTIVITY_PARAM, USER_ACTIVITY_ACTIVE_LOCAL_KEY);
+				session.setAttribute(ROLE_PARAM, role);	
 				
 				response.sendRedirect("controller?command=go_to_news_list");
 			} else {
-				session.setAttribute("userActivity", "not active");
-				session.setAttribute("auth_error", "wrong login or password");
+				session.setAttribute(USER_ACTIVITY_PARAM, USER_ACTIVITY_NOT_ACTIVE_LOCAL_KEY);
+				session.setAttribute(AUTH_ERROR_MESSAGE_PARAM, AUTH_ERROR_MESSAGE_LOCAL_KEY);
 				
 				response.sendRedirect("controller?command=go_to_base_page");
 			}
 		} catch (ServiceException e) {
-			session.setAttribute("error_msg", "sign in error");
+			session.setAttribute(ERROR_MESSAGE_PARAM, e.getMessage());
 			response.sendRedirect("controller?command=go_to_error_page");
 		}
 	}

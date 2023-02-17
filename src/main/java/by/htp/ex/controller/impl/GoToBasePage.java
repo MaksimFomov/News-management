@@ -15,6 +15,10 @@ import jakarta.servlet.http.HttpSession;
 
 public class GoToBasePage implements Command{
 	private final INewsService newsService = ServiceProvider.getInstance().getNewsService();
+	
+	private static final String NEWS_PARAM = "news";
+	private static final String ERROR_MESSAGE_PARAM = "error_msg";
+	private static final String ERROR_MESSAGE_LOCAL_KEY = "cannot get the latest list of news";
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,13 +28,13 @@ public class GoToBasePage implements Command{
 			latestNews = newsService.latestList(5);
 			
 			if(latestNews.size() > 0) {
-				request.setAttribute("news", latestNews);
+				request.setAttribute(NEWS_PARAM, latestNews);
 			}
 			
 			request.getRequestDispatcher("WEB-INF/pages/layouts/baseLayout.jsp").forward(request, response);
 		} catch (ServiceException e) {
 			HttpSession session = request.getSession(false);
-			session.setAttribute("error_msg", "cannot get the latest list of news");
+			session.setAttribute(ERROR_MESSAGE_PARAM, ERROR_MESSAGE_LOCAL_KEY);
 			
 			response.sendRedirect("controller?command=go_to_error_page");
 		}

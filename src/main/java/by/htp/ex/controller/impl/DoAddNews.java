@@ -21,6 +21,11 @@ public class DoAddNews implements Command {
 	private static final String JSP_NEWS_CONTENT_PARAM = "news_content";
 	private static final String JSP_NEWS_DATE_PARAM = "news_date";
 	
+	private static final String INFO_MESSAGE_PARAM = "save_success";
+	private static final String INFO_MESSAGE_LOCAL_KEY = "suc";
+	private static final String ERROR_MESSAGE_PARAM = "error_msg";
+	private static final String ERROR_MESSAGE_LOCAL_KEY = "add error";
+	
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	HttpSession session = request.getSession(false);
@@ -35,10 +40,10 @@ public class DoAddNews implements Command {
 
         try {
             newsService.add(newNews);
-            session.setAttribute("save_success", "suc");
+            session.setAttribute(INFO_MESSAGE_PARAM, INFO_MESSAGE_LOCAL_KEY);
             response.sendRedirect("controller?command=go_to_news_list");
         } catch (ServiceException e) {
-            session.setAttribute("error_msg", "add error");
+            session.setAttribute(ERROR_MESSAGE_PARAM, ERROR_MESSAGE_LOCAL_KEY);
             response.sendRedirect("controller?command=go_to_error_page");
         }
     }
