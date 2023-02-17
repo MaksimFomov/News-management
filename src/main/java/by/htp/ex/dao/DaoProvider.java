@@ -21,7 +21,6 @@ public final class DaoProvider {
 	}
 
 	public static DaoProvider getInstance() {
-
 		return instance;
 	}
 }

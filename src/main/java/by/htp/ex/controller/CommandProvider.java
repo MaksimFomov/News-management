@@ -3,7 +3,6 @@ package by.htp.ex.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import by.htp.ex.controller.impl.*;
 
 public class CommandProvider {
@@ -28,8 +27,8 @@ public class CommandProvider {
 	}
 	
 	public Command getCommand(String name) {
-
 		Command command;
+		
 		try {
 			CommandName commandName = CommandName.valueOf(name.toUpperCase());
 			command = commands.get(commandName);

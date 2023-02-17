@@ -19,11 +19,11 @@ public class NewsDAO implements INewsDAO {
 	private static final String SQL_QUERY_FOR_UPDATE_NEWS = "UPDATE news SET title = ?, brief = ?, content = ?, date = ?, user_id = 7 WHERE id = ?"; 
 	private static final String SQL_QUERY_FOR_DELETE_NEWS = "DELETE FROM news WHERE id = ?";
 	
-	private static final String DB_FIELD_ID = "password";
+	private static final String DB_FIELD_ID = "id";
 	private static final String DB_FIELD_TITLE = "title";
-	private static final String DB_FIELD_BRIEF = "news_brief";
-	private static final String DB_FIELD_CONTENT = "news_content";
-	private static final String DB_FIELD_DATE= "news_date";
+	private static final String DB_FIELD_BRIEF = "brief";
+	private static final String DB_FIELD_CONTENT = "content";
+	private static final String DB_FIELD_DATE= "date";
 	
 	@Override
 	public List<News> getLatestNewsList(int count) throws NewsDAOException {
