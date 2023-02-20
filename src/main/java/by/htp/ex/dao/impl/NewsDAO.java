@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import by.htp.ex.bean.News;
@@ -27,7 +28,14 @@ public class NewsDAO implements INewsDAO {
 	
 	@Override
 	public List<News> getLatestNewsList(int count) throws NewsDAOException {
-		return getNewsList();
+		List<News> latestNews = getNewsList();
+		Collections.sort(latestNews, (emp1, emp2) -> emp2.getDate().compareTo(emp1.getDate()));
+		
+		if(latestNews.size() > count) {
+			return latestNews.stream().limit(count).toList();
+		}
+
+		return latestNews;
 	}
 
 	@Override
