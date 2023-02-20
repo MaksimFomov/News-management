@@ -37,7 +37,7 @@ public class DoAddNews implements Command {
         		request.getParameter(JSP_NEWS_BRIEF_PARAM), 
         		request.getParameter(JSP_NEWS_CONTENT_PARAM), 
         		request.getParameter(JSP_NEWS_DATE_PARAM));
-
+        
         try {
             newsService.add(newNews);
             session.setAttribute(INFO_MESSAGE_PARAM, INFO_MESSAGE_LOCAL_KEY);

@@ -22,7 +22,7 @@
 
                 <td class="space_around_view_text">
                 	<div class="word-breaker">
-                         <input type="text" name="news_date" value="<c:out value="${requestScope.news.date }"/>"/>
+                         <input type="date" name="news_date" value="<c:out value="${requestScope.news.date }"/>"/>
                     </div>
                 </td>
             </tr>
