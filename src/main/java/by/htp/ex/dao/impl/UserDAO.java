@@ -10,10 +10,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 public class UserDAO implements IUserDAO {		
+	private static final ReentrantLock LOCK = new ReentrantLock();
+	
 	private static final String SQL_QUERY_FOR_LOGINATION_AND_FIND_USER_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
 	private static final String SQL_QUERY_FOR_GET_ROLE = "SELECT * FROM users JOIN roles ON users.roles_id = roles.id WHERE users.login = ?";
 	private static final String SQL_QUERY_FOR_REGISTRATION = "INSERT INTO Users(login, password, roles_id) VALUES (?, ?, 2)";
@@ -71,6 +74,8 @@ public class UserDAO implements IUserDAO {
 	@Override
 	public boolean registration(Users user) throws DaoException  {		
 		if(!findUserByLogin(user.getLogin())) {
+			LOCK.lock();
+			
 			try (Connection connection = ConnectionPool.getInstance().takeConnection();
 					PreparedStatement statement = connection.prepareStatement(SQL_QUERY_FOR_REGISTRATION)) {
 				user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
@@ -84,7 +89,9 @@ public class UserDAO implements IUserDAO {
 				throw new DaoException("sql error", e);
 			}  catch (ConnectionPoolException e) {
 				throw new DaoException("error trying to take connection", e);
-			} 
+			} finally {
+				LOCK.unlock();
+			}
 		}
 		
 		return false;

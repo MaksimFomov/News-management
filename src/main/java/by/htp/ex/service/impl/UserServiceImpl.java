@@ -17,11 +17,7 @@ public class UserServiceImpl implements IUserService {
 	private static final String ROLE_GUEST = "guest";
 	
 	@Override
-	public String signIn(Users user) throws ServiceException {
-		/*if(!userDataValidation.checkAuthData(user.getLogin(), user.getPassword())) {
-			throw new ServiceException(ERROR_MESSAGE_FOR_INVALID_LOGIN_OR_PASSWORD);
-		}*/
-		
+	public String signIn(Users user) throws ServiceException {		
 		try {
 			if(userDAO.logination(user)) {
 				return userDAO.getRole(user);
