@@ -14,7 +14,6 @@ public class UserServiceImpl implements IUserService {
 	private final IUserDAO userDAO = DaoProvider.getInstance().getUserDao();
 	
 	private static final String ERROR_MESSAGE_FOR_INVALID_LOGIN_OR_PASSWORD = "invalid login or password value";
-	
 	private static final String ROLE_GUEST = "guest";
 	
 	@Override

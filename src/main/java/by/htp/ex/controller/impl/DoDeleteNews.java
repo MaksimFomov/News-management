@@ -19,7 +19,8 @@ public class DoDeleteNews implements Command {
 	private static final String INFO_MESSAGE_PARAM = "delete_success";
 	private static final String INFO_MESSAGE_LOCAL_KEY = "suc";
 	private static final String ERROR_MESSAGE_PARAM = "error_msg";
-	private static final String ERROR_MESSAGE_LOCAL_KEY = "delete error";
+	private static final String FIRST_ERROR_MESSAGE_LOCAL_KEY = "delete error";
+	private static final String SECOND_ERROR_MESSAGE_LOCAL_KEY = "no news to delete selected";
 	
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,12 +34,12 @@ public class DoDeleteNews implements Command {
                 session.setAttribute(INFO_MESSAGE_PARAM, INFO_MESSAGE_LOCAL_KEY);
                 response.sendRedirect("controller?command=go_to_news_list");
             } catch (ServiceException e) {
-                session.setAttribute(ERROR_MESSAGE_PARAM, ERROR_MESSAGE_LOCAL_KEY);
+                session.setAttribute(ERROR_MESSAGE_PARAM, FIRST_ERROR_MESSAGE_LOCAL_KEY);
                 response.sendRedirect("controller?command=go_to_error_page");
             }
         } 
         else {
-            session.setAttribute("error_msg", "no news to delete selected");
+            session.setAttribute(ERROR_MESSAGE_PARAM, SECOND_ERROR_MESSAGE_LOCAL_KEY);
             response.sendRedirect("controller?command=go_to_error_page");
         }
     }    

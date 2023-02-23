@@ -3,7 +3,7 @@ package by.htp.ex.util.validation;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserDataValidationImpl implements UserDataValidation{
+public class UserDataValidationImpl implements UserDataValidation {
 	private static final String PATTERN_FOR_LOGIN = "^[a-zA-Z][a-zA-Z0-9-_\\.]{1,20}$";
 	private static final String PATTERN_FOR_PASSWORD = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$";
 	

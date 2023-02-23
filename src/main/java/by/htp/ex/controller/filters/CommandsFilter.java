@@ -22,7 +22,7 @@ public class CommandsFilter implements Filter {
 
     private final static List<CommandName> guestCommands = List.of
             (DO_SIGN_IN, DO_REGISTRATION, DO_CHANGE_LANGUAGE, 
-            		GO_TO_REGISTRATION_PAGE, GO_TO_VIEW_NEWS, GO_TO_NEWS_LIST, GO_TO_BASE_PAGE);
+            		GO_TO_REGISTRATION_PAGE, GO_TO_VIEW_NEWS, GO_TO_NEWS_LIST, GO_TO_BASE_PAGE, GO_TO_ERROR_PAGE);
     
 	private final static Map<String, List<CommandName>> rolePermissions = new HashMap<>() {
 		private static final long serialVersionUID = 1L;
@@ -51,11 +51,11 @@ public class CommandsFilter implements Filter {
                  if(userRole == null) {
                 	 userRole = "guest";
                  }
+                 
                  if(!rolePermissions.get(userRole).contains(commandName)) {
                 	 session.setAttribute("error_msg", "cannot do this request for this role"); 
                  }
              } catch (IllegalArgumentException e) {
-            	 System.out.println("error");
                  session.setAttribute("error_msg", "invalid command passed in request");
              }
              

@@ -8,9 +8,14 @@ import by.htp.ex.dao.INewsDAO;
 import by.htp.ex.dao.NewsDAOException;
 import by.htp.ex.service.INewsService;
 import by.htp.ex.service.ServiceException;
+import by.htp.ex.util.validation.NewsDataValidation;
+import by.htp.ex.util.validation.ValidationProvider;
 
-public class NewsServiceImpl implements INewsService{
+public class NewsServiceImpl implements INewsService {
+	private final NewsDataValidation newsDataValidation = ValidationProvider.getInstance().getNewsDataValidation();
 	private final INewsDAO newsDAO = DaoProvider.getInstance().getNewsDAO();
+	
+	private static final String ERROR_MESSAGE_FOR_INVALID_NEWS_DATA = "fill in all the fields";
 
 	@Override
 	public void delete(String[] newsIds) throws ServiceException {
@@ -23,6 +28,10 @@ public class NewsServiceImpl implements INewsService{
 
 	@Override
 	public void add(News news) throws ServiceException {
+		if(!newsDataValidation.checkNewsData(news.getTitle(), news.getBrief(), news.getContent(), news.getDate())) {
+			throw new ServiceException(ERROR_MESSAGE_FOR_INVALID_NEWS_DATA);
+		}
+		
 		try {			
 			newsDAO.addNews(news);
 		} catch (NewsDAOException e) {
@@ -31,7 +40,11 @@ public class NewsServiceImpl implements INewsService{
 	}
 
 	@Override
-	public void update(News news) throws ServiceException{
+	public void update(News news) throws ServiceException {
+		if(!newsDataValidation.checkNewsData(news.getTitle(), news.getBrief(), news.getContent(), news.getDate())) {
+			throw new ServiceException(ERROR_MESSAGE_FOR_INVALID_NEWS_DATA);
+		}
+		
 		try {			
 			newsDAO.updateNews(news);
 		} catch (NewsDAOException e) {
