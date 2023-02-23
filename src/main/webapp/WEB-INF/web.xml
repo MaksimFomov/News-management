@@ -36,6 +36,12 @@
 	</filter>
 	
 	<filter>
+		<display-name>CommandsFilter</display-name>
+		<filter-name>CommandsFilter</filter-name>
+		<filter-class>by.htp.ex.controller.filters.CommandsFilter</filter-class>
+	</filter>
+	
+	<filter>
 		<display-name>PreviousRequestFilter</display-name>
 		<filter-name>PreviousRequestFilter</filter-name>
 		<filter-class>by.htp.ex.controller.filters.PreviousRequestFilter</filter-class>
@@ -43,6 +49,11 @@
 	
 	<filter-mapping>
 		<filter-name>SessionFilter</filter-name>
+		<url-pattern>/controller</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>CommandsFilter</filter-name>
 		<url-pattern>/controller</url-pattern>
 	</filter-mapping>
 	
