@@ -7,6 +7,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class SessionFilter implements Filter {
+	private static final String ROLE_PARAM = "role";
+	private static final String ROLE_GUEST_LOCAL_KEY = "guest";
+	
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {}
 
@@ -16,7 +19,7 @@ public class SessionFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
         
         if (req.getSession() == null) {
-            ((HttpServletRequest) request).getSession(true).setAttribute("role", "guest");
+            ((HttpServletRequest) request).getSession(true).setAttribute(ROLE_PARAM, ROLE_GUEST_LOCAL_KEY);
             resp.sendRedirect("controller?command=go_to_base_page");
         }
         chain.doFilter(request, response);

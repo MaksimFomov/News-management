@@ -1,4 +1,6 @@
-package by.htp.ex.util.validation;
+package by.htp.ex.util.validation.impl;
+
+import by.htp.ex.util.validation.NewsDataValidation;
 
 public class NewsDataValidationImpl implements NewsDataValidation {
 	

@@ -1,7 +1,9 @@
-package by.htp.ex.util.validation;
+package by.htp.ex.util.validation.impl;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import by.htp.ex.util.validation.UserDataValidation;
 
 public class UserDataValidationImpl implements UserDataValidation {
 	private static final String PATTERN_FOR_LOGIN = "^[a-zA-Z][a-zA-Z0-9-_\\.]{1,20}$";

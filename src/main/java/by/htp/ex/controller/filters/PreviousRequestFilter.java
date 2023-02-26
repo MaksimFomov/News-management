@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.util.Map;
 
 public class PreviousRequestFilter implements Filter {
+	private static final String CURRENT_REQUEST_NAME = "current_request_name";
+	private static final String CURRENT_REQUEST_PARAMS = "current_request_params";
+	private static final String LAST_REQUEST_PARAM = "last_request";
+	
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {}
 
@@ -24,15 +28,15 @@ public class PreviousRequestFilter implements Filter {
         	Map<String, String[]> lastRequestParams;
 
             if (!paramsMap.isEmpty()) {
-                lastRequestName = (String)session.getAttribute("current_request_name");
-                lastRequestParams = (Map<String, String[]>)session.getAttribute("current_request_params");                          
+                lastRequestName = (String)session.getAttribute(CURRENT_REQUEST_NAME);
+                lastRequestParams = (Map<String, String[]>)session.getAttribute(CURRENT_REQUEST_PARAMS);                          
 
-                session.setAttribute("current_request_name", req.getRequestURL().toString());
-                session.setAttribute("current_request_params", paramsMap);
+                session.setAttribute(CURRENT_REQUEST_NAME, req.getRequestURL().toString());
+                session.setAttribute(CURRENT_REQUEST_PARAMS, paramsMap);
 
                 if (lastRequestName == null) {
-                    lastRequestName = (String)session.getAttribute("current_request_name");
-                    lastRequestParams = (Map<String, String[]>)session.getAttribute("current_request_params");  
+                    lastRequestName = (String)session.getAttribute(CURRENT_REQUEST_NAME);
+                    lastRequestParams = (Map<String, String[]>)session.getAttribute(CURRENT_REQUEST_PARAMS);  
                 }
                 
                 lastRequest = new StringBuilder(lastRequestName);
@@ -45,9 +49,9 @@ public class PreviousRequestFilter implements Filter {
                     }
                     lastRequest.deleteCharAt(lastRequest.length() - 1);
                     
-                    session.setAttribute("last_request", lastRequest.toString());
+                    session.setAttribute(LAST_REQUEST_PARAM, lastRequest.toString());
                 } catch (Exception e) {
-                    session.setAttribute("last_request", null);
+                    session.setAttribute(LAST_REQUEST_PARAM, null);
                 }
             }
         }
