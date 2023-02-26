@@ -27,15 +27,12 @@ public class NewsDAO implements INewsDAO {
 	private static final String DB_FIELD_DATE= "date";
 	
 	@Override
-	public List<News> getLatestNewsList(int count) throws NewsDAOException {
-		List<News> latestNews = getNewsList();
-		Collections.sort(latestNews, (emp1, emp2) -> emp2.getDate().compareTo(emp1.getDate()));
-		
-		if(latestNews.size() > count) {
-			return latestNews.stream().limit(count).toList();
+	public List<News> getLatestNewsList(int count) throws NewsDAOException {		
+		if(getNewsList().size() > count) {
+			return getNewsList().stream().limit(count).toList();
 		}
 
-		return latestNews;
+		return getNewsList();
 	}
 
 	@Override
@@ -55,6 +52,8 @@ public class NewsDAO implements INewsDAO {
 						resultSet.getString(DB_FIELD_CONTENT),
 						resultSet.getString(DB_FIELD_DATE)));
 			} 
+			
+			Collections.sort(newsList, (news1, news2) -> news2.getDate().compareTo(news1.getDate()));
 		} catch (SQLException e) {
 			throw new NewsDAOException("sql error", e);
 		} catch (ConnectionPoolException e) {
