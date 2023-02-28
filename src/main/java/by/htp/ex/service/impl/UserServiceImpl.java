@@ -1,6 +1,6 @@
 package by.htp.ex.service.impl;
 
-import by.htp.ex.bean.Users;
+import by.htp.ex.bean.User;
 import by.htp.ex.dao.DaoException;
 import by.htp.ex.dao.DaoProvider;
 import by.htp.ex.dao.IUserDAO;
@@ -17,7 +17,7 @@ public class UserServiceImpl implements IUserService {
 	private static final String ROLE_GUEST = "guest";
 	
 	@Override
-	public String signIn(Users user) throws ServiceException {		
+	public String signIn(User user) throws ServiceException {		
 		try {
 			if(userDAO.logination(user)) {
 				return userDAO.getRole(user);
@@ -31,7 +31,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public boolean register(Users user) throws ServiceException {
+	public boolean register(User user) throws ServiceException {
 		if(!userDataValidation.checkAuthData(user.getLogin(), user.getPassword())) {
 			throw new ServiceException(ERROR_MESSAGE_FOR_INVALID_LOGIN_OR_PASSWORD);
 		}

@@ -2,7 +2,7 @@ package by.htp.ex.controller.impl;
 
 import java.io.IOException;
 
-import by.htp.ex.bean.Users;
+import by.htp.ex.bean.User;
 import by.htp.ex.controller.Command;
 import by.htp.ex.service.ServiceException;
 import by.htp.ex.service.ServiceProvider;
@@ -31,7 +31,7 @@ public class DoSignIn implements Command {
 		HttpSession session = request.getSession(false);
 		
 		try {
-			Users user = new Users();
+			User user = new User();
 			user.setLogin(request.getParameter(JSP_LOGIN_PARAM));
 			user.setPassword(request.getParameter(JSP_PASSWORD_PARAM));
 			

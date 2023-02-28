@@ -3,21 +3,21 @@ package by.htp.ex.bean;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Users implements Serializable {
+public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
 	private String login;
 	private String password;
-	private int roles_id;
+	private int roleId;
 
-	public Users() {}
+	public User() {}
 
-	public Users(int id, String login, String password, int roles_id) {
+	public User(int id, String login, String password, int roleId) {
 		this.id = id;
 		this.login = login;
 		this.password = password;
-		this.roles_id = roles_id;
+		this.roleId = roleId;
 	}
 	
 	public int getId() {
@@ -44,24 +44,24 @@ public class Users implements Serializable {
 		this.password = password;
 	}
 	
-	public int getRoles_id() {
-		return roles_id;
+	public int getRoleId() {
+		return roleId;
 	}
 
-	public void setRoles_id(int roles_id) {
-		this.roles_id = roles_id;
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
 	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Users that = (Users) o;
-		return Objects.equals(id, that.id) && Objects.equals(login, that.login) && Objects.equals(password, that.password) && Objects.equals(roles_id, that.roles_id);
+		User that = (User) o;
+		return Objects.equals(id, that.id) && Objects.equals(login, that.login) && Objects.equals(password, that.password) && Objects.equals(roleId, that.roleId);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, login, password, roles_id);
+		return Objects.hash(id, login, password, roleId);
 	}
 }
