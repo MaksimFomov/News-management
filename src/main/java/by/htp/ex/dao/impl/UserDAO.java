@@ -19,7 +19,7 @@ public class UserDAO implements IUserDAO {
 	
 	private static final String SQL_QUERY_FOR_LOGINATION_AND_FIND_USER_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
 	private static final String SQL_QUERY_FOR_GET_ROLE = "SELECT * FROM users JOIN roles ON users.roles_id = roles.id WHERE users.login = ?";
-	private static final String SQL_QUERY_FOR_REGISTRATION = "INSERT INTO User(login, password, roles_id) VALUES (?, ?, 2)";
+	private static final String SQL_QUERY_FOR_REGISTRATION = "INSERT INTO users(login, password, roles_id) VALUES (?, ?, 2)";
 	
 	private static final String DB_FIELD_PASSWORD = "password";
 	private static final String DB_FIELD_TITLE = "title";

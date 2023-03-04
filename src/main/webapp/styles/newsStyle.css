@@ -2,7 +2,7 @@
 html,body {
 	height: 100%;
 	width: 1000px;
-
+	background-color: #87CEEB;
 }
 
 * {
@@ -10,6 +10,7 @@ html,body {
 }
 
 .page {
+	background-color: #87CEFA;
 	border: solid 1px black;
 	font: normal 100% Times New Roman, Verdana, Tahoma, sans-serif;
 	height: 99%;
@@ -50,7 +51,7 @@ html,body {
 	padding-right: 5px;
  	padding-left: 10px; 
 	
-	border: solid 1px grey;
+	border: solid 1px black;
 	
 	margin-top: 5px;
 	margin-bottom: 10px;
@@ -80,20 +81,20 @@ html,body {
  	margin-top : 5px;
  	margin-left : 10px;
  
-	background: LightGray;
+	background: #4682B4;
 	padding-left: 10px;
 	
 }
 
 .menu-title {
-	background: Gray;
+	background: #4682B4;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	padding-left: 10px;
 }
 
 .list-menu-wrapper {
-	background: White;
+	background: #87CEFA;
 	line-height: 1.5;
 	width: 80%;
 	padding-top: 10px;
@@ -235,7 +236,7 @@ html,body {
 	padding-left: 10px;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	color: Grey;
+	color: black;
 }
 
 .first-view-button {

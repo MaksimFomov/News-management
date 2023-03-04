@@ -21,6 +21,7 @@ public class DoRegistration implements Command {
 	private static final String INFO_MESSAGE_PARAM = "register_success";
 	private static final String INFO_MESSAGE_LOCAL_KEY = "suc";
 	private static final String ERROR_MESSAGE_PARAM = "register_error";
+	private static final String INVALID_VALUES_PARAM = "invalid_values_for_register";
 	private static final String ERROR_MESSAGE_LOCAL_KEY = "err";
 
 	@Override
@@ -34,15 +35,15 @@ public class DoRegistration implements Command {
 			
 			if (!service.register(newUser)) {
 				session.setAttribute(ERROR_MESSAGE_PARAM, ERROR_MESSAGE_LOCAL_KEY);
+				response.sendRedirect("controller?command=go_to_registration_page");
 			} 
 			else {
 				session.setAttribute(INFO_MESSAGE_PARAM, INFO_MESSAGE_LOCAL_KEY);
+				response.sendRedirect("controller?command=go_to_news_list");
 			}
-			
-			response.sendRedirect("controller?command=go_to_base_page");
 		} catch (ServiceException e) {
-			session.setAttribute("error_msg", e.getMessage());
-			response.sendRedirect("controller?command=go_to_error_page");
+			session.setAttribute(INVALID_VALUES_PARAM, ERROR_MESSAGE_LOCAL_KEY);
+			response.sendRedirect("controller?command=go_to_registration_page");
 		}
 	}
 }

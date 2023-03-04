@@ -14,7 +14,7 @@
 		            ${header_logination_login}
 		        <input type="text" name="login"/> <br>
 		            ${header_logination_password}
-		        <input type="text" name="password"/> <br>
+		        <input type="password" name="password"/> <br>
 		        <input type="hidden" name="command" value="do_registration" />
 		        <input type="submit" value="${save}"/>
 		    </form>

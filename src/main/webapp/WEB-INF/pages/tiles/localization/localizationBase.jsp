@@ -72,4 +72,8 @@
 <fmt:message bundle="${loc}" key="save.success" var="save_success_message"/>
 <fmt:message bundle="${loc}" key="register.success" var="register_success_message"/>
 <fmt:message bundle="${loc}" key="delete.success" var="delete_success_message"/>
+
+<!-- error messages -->
 <fmt:message bundle="${loc}" key="register.error" var="register_error_message"/>
+<fmt:message bundle="${loc}" key="register.invalid.values" var="register_invalid_values_message"/>
+<fmt:message bundle="${loc}" key="add.edit.news.invalid.values" var="add_edit_news_invalid_values_message"/>

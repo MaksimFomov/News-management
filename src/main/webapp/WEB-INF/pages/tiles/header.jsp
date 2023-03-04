@@ -40,6 +40,13 @@
 						</font>
 					</c:if>
 					
+					<c:if test="${not (sessionScope.invalid_values_for_register eq null)}">
+						<font color="red">
+							<c:out value="${register_invalid_values_message}" />
+							<c:remove var="invalid_values_for_register"/>
+						</font>
+					</c:if>
+					
 					<a href="controller?command=go_to_registration_page">${header_registration_link}</a> <input type="submit" value="${header_signin}" /><br />
 				</form>
 			</div>
@@ -63,6 +70,13 @@
 					<font color="green">
 						<c:out value="${delete_success_message}" />
 						<c:remove var="delete_success"/>
+					</font>
+				</c:if>
+				
+				<c:if test="${not (sessionScope.add_or_edit_news_error eq null)}">
+					<font color="red">
+						<c:out value="${add_edit_news_invalid_values_message}" />
+						<c:remove var="add_or_edit_news_error"/>
 					</font>
 				</c:if>
 			</div>
